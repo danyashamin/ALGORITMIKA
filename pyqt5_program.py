@@ -1,17 +1,11 @@
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QApplication
 import sys
 
-f_program_name = sys.argv[0]
-file_program = open(f_program_name, 'br')
-print(file_program.read()[0])
-
 if __name__ == '__main__':
-    print(sys.argv)
-    app = QApplication(sys.argv)
-    widget = QWidget()
-    widget.resize(800, 600)
-    widget.move(150, 150)
-    widget.setWindowTitle('Title')
-    widget.setObjectName('form')
-    widget.show()
-    sys.exit(app.exec_())
+    application_1 = QApplication(sys.argv)
+    widget_1 = QWidget()
+    widget_1.resize(500, 400)
+    widget_1.move(300, 300)
+    widget_1.setWindowTitle('My_title')
+    widget_1.show()
+    sys.argv(application_1.exec_())
