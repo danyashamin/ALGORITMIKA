@@ -1,13 +1,11 @@
-def record(func):
-    def cycleRecotd():
-        func()
-    return cycleRecotd
-@record
-def funcArgOne():
-    print(1)
-def funcArgTwo():
-    print(2)
-funObj = record(funcArgOne)
-funObj()
-funcObjSecond = record(funcArgTwo)
-funcObjSecond()
+from PyQt5.QtWidgets import QApplication, QWidget
+import sys
+
+app = QApplication(sys.argv)
+widget_1 = QWidget()
+widget_1.resize(500, 300)
+widget_1.move(400, 600)
+widget_1.setWindowTitle('Окно')
+if __name__ == '__main__':
+    widget_1.show()
+    sys.exit(app.exec_())
