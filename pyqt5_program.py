@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import QApplication, QWidget
 import sys
 
-app = QApplication(sys.argv)
-widget_1 = QWidget()
-widget_1.resize(500, 300)
-widget_1.move(400, 600)
-widget_1.setWindowTitle('Окно')
+applicationOne = QApplication(sys.argv)
+widgetOne = QWidget()
+widgetOne.resize(500, 300)
+widgetOne.move(300, 300)
+widgetOne.setWindowTitle('MyLovelyWidget')
 if __name__ == '__main__':
-    widget_1.show()
-    sys.exit(app.exec_())
+    widgetOne.show()
+    sys.argv(applicationOne.exec_())
