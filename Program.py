@@ -1,18 +1,20 @@
-def service(func_service):
-    def service_performance():
-        func_service()
-        print('С вас тыщ!')
-    return service_performance
+class DryCleaner():
+    def __init__(self, service):
+        self.sevice = dry_cleaner(service)
+    def performance(self):
+        self.sevice()
 
-@service
-def hair_cut():
-    print('Я постриг тебе волосы.')
-def shaving():
-    print('Я побрил тебя.')
+def dry_cleaner(service):
+    def work_dry_cleaner():
+        service()
+    return work_dry_cleaner
+@dry_cleaner
+def cleaning_outwear():
+    print('Мы почистили вашу вернюю одежду!')
+def cleaning_baby_clothes():
+    print('Мы почистили одежду ваших детей!')
 
-service_type = input(f'Какую услугу вы желаете?\n')
-qlossery = {'стрижку':hair_cut, 'бритьё':shaving}
-service_obj = service(qlossery[service_type])
-question = input(f'Выполнить?\n')
-if question == 'да':
-    service_obj()
+services = {'чистка верхней одежды':cleaning_outwear, 'чистка детских вещей':cleaning_baby_clothes}
+serviceType = input('Что желаете?')
+dryCleanerFirst = DryCleaner(services[serviceType.lower()])
+dryCleanerFirst.performance()
