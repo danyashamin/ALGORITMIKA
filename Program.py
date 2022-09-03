@@ -17,4 +17,9 @@ def cleaning_baby_clothes():
 services = {'чистка верхней одежды':cleaning_outwear, 'чистка детских вещей':cleaning_baby_clothes}
 serviceType = input('Что желаете?')
 dryCleanerFirst = DryCleaner(services[serviceType.lower()])
-dryCleanerFirst.performance()
+permission = input('Вы полнить?')
+if permission.lower() == 'да':
+    dryCleanerFirst.performance()
+else:
+    print('Ладно, выполним когда-нибудь.')
+print('Всего доброго!')
