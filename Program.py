@@ -1,25 +1,12 @@
-class DryCleaner():
-    def __init__(self, service):
-        self.sevice = dry_cleaner(service)
-    def performance(self):
-        self.sevice()
+from multiprocessing import managers
 
-def dry_cleaner(service):
-    def work_dry_cleaner():
-        service()
-    return work_dry_cleaner
-@dry_cleaner
-def cleaning_outwear():
-    print('Мы почистили вашу вернюю одежду!')
-def cleaning_baby_clothes():
-    print('Мы почистили одежду ваших детей!')
 
-services = {'чистка верхней одежды':cleaning_outwear, 'чистка детских вещей':cleaning_baby_clothes}
-serviceType = input('Что желаете?')
-dryCleanerFirst = DryCleaner(services[serviceType.lower()])
-permission = input('Вы полнить?')
-if permission.lower() == 'да':
-    dryCleanerFirst.performance()
-else:
-    print('Ладно, выполним когда-нибудь.')
-print('Всего доброго!')
+class Manager():
+    def __init__(self, Name, suggestions):
+        self.Name = Name
+        self.suggestions = suggestions
+    def __call__(self):
+        print('My suggestions:', self.suggestions)
+
+managerFirst = Manager('Игорь', ['пойти погулять', 'не пойти погулять'])
+managerFirst()
