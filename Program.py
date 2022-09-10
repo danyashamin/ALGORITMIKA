@@ -1,8 +1,20 @@
-class Manage:
-    def __call__(self, suggesting):
-        print('I suggest something...')
-        suggesting()
-def suggesting_1():
-    print('Go for a walk!')
-manage_1 = Manage()
-manage_1(suggesting_1)
+from msilib.schema import Condition
+
+
+class Employee():
+    def __init__(self, name, experience):
+        self.name = name
+        self.experience = experience
+    def work(self):
+        print('Выполняю работу. Моя специальность:', self.experience)
+    def __call__(self):
+        self.work()
+        print('И моё имя:', self.name)
+    def __lt__(self, other):
+        print(self, other)
+    def __cmp__(self, other):
+        return 1+other
+
+employee = Employee('Лёша', 'Тракторист')
+employee()
+condition = employee<3
