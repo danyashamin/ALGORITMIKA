@@ -1,9 +1,11 @@
-class Player(object):
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-    def __gt__(self, other):
-        return self.age - other.age
-p1 = Player('Игорь', 12)
-p2 = Player('Анна', 13)
-print(p1 > p2)
+from PyQt5.QtWidgets import QWidget, QApplication
+import sys
+
+if __name__ == '__main__':
+    app_1 = QApplication(sys.argv)
+    widget_1 = QWidget()
+    widget_1.resize(300, 200)
+    widget_1.move(300, 300)
+    widget_1.setWindowTitle('MyWindow')
+    widget_1.show()
+    sys.exit(app_1.exec_())
