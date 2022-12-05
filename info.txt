@@ -1,0 +1,18 @@
+Насколько я помню, на MainWindow ничего напрямую класть нельзя - нужно назначить centralWidget, а потом уже на него натянуть layout.
+В таком случае при ресайзе mainwnd тянет виджет, а виджет - layout.
+
+И, кстати, кнопка и поле ввода по вертикали всё равно не тянутся, зачем это тебе?
+
+schizoid ★★★ (31.08.11 18:23:52 MSK)
+Показать ответы Ссылка
+Ответ на: комментарий от schizoid 31.08.11 18:23:52 MSK
+
+И, кстати, кнопка и поле ввода по вертикали всё равно не тянутся, зачем это тебе?
+
+Если попросить, то тянется
+
+        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
+        pushButton->setSizePolicy(sizePolicy);
