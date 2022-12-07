@@ -19,7 +19,13 @@ class NeedWind(QWidget):
         self.line_h.addLayout(self.edit_big_line)
 
         self.small_widgets_line = QVBoxLayout()
-        self.small_widgets_line.addStretch(3)
+        self.small_widgets_line.addStretch(5)
+        self.input_label = QLabel(self)
+        self.input_label.setText('Введите текст:')
+        self.input_label_layout = QHBoxLayout()
+        self.input_label_layout.setSpacing(1)
+        self.input_label_layout.addWidget(self.input_label)
+        self.small_widgets_line.addLayout(self.input_label_layout)
         self.edit_small = QTextEdit()
         self.small_widgets_line.addWidget(self.edit_small, stretch=1)
         self.line_h.addLayout(self.small_widgets_line)
@@ -33,10 +39,13 @@ class NeedWind(QWidget):
             count+=1
             sys.exit(app.exec_())
 
-with open('file_my.json') as file_my:
-    dict_my = json.load(file_my)
-    print(dict_my)
-
 app = QApplication(sys.argv)
 count = 0
 n = NeedWind()
+
+with open('file_my.json', 'r', encoding='UTF-8') as file_my:
+    dict_my = json.load(file_my)
+    for key in dict_my.keys():
+        n.edit_big.setText(key)
+    n.show()
+    print(dict_my)
