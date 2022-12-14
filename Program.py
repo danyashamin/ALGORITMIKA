@@ -1,51 +1,94 @@
-import json
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTextEdit
 from PyQt5.QtCore import Qt
-import sys
-
-class NeedWind(QWidget):
-    def __init__(self):
-        global count
-        super().__init__()
-        self.setGeometry(300, 300, 500, 300)
-        self.setWindowTitle('Memory Card')
-        
-        self.common_line = QVBoxLayout()
-        self.line_h = QHBoxLayout()
-        self.line_h.addStretch(1)
-        self.edit_big = QTextEdit()
-        self.edit_big_line = QVBoxLayout()
-        self.edit_big_line.addWidget(self.edit_big, stretch=1)
-        self.line_h.addLayout(self.edit_big_line)
-
-        self.small_widgets_line = QVBoxLayout()
-        self.small_widgets_line.addStretch(5)
-        self.input_label = QLabel(self)
-        self.input_label.setText('Введите текст:')
-        self.input_label_layout = QHBoxLayout()
-        self.input_label_layout.setSpacing(1)
-        self.input_label_layout.addWidget(self.input_label)
-        self.small_widgets_line.addLayout(self.input_label_layout)
-        self.edit_small = QTextEdit()
-        self.small_widgets_line.addWidget(self.edit_small, stretch=1)
-        self.line_h.addLayout(self.small_widgets_line)
-
-        self.common_line.addLayout(self.line_h)
-
-        self.setLayout(self.common_line)
-
-        self.show()
-        if count == 0:
-            count+=1
-            sys.exit(app.exec_())
-
-app = QApplication(sys.argv)
-count = 0
-n = NeedWind()
-
-with open('file_my.json', 'r', encoding='UTF-8') as file_my:
-    dict_my = json.load(file_my)
-    for key in dict_my.keys():
-        n.edit_big.setText(key)
-    n.show()
-    print(dict_my)
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QListWidget, QLineEdit, QTextEdit, QInputDialog, QHBoxLayout, QVBoxLayout, QFormLayout
+ 
+import json
+ 
+app = QApplication([])
+ 
+'''Заметки в json'''
+notes = {
+    "Добро пожаловать!" : {
+        "текст" : "Это самое лучшее приложение для заметок в мире!",
+        "теги" : ["добро", "инструкция"]
+    }
+}
+with open("notes_data.json", "w") as file:
+    json.dump(notes, file)
+ 
+ 
+'''Интерфейс приложения'''
+#параметры окна приложения
+notes_win = QWidget()
+notes_win.setWindowTitle('Умные заметки')
+notes_win.resize(900, 600)
+ 
+#виджеты окна приложения
+list_notes = QListWidget()
+list_notes_label = QLabel('Список заметок')
+ 
+button_note_create = QPushButton('Создать заметку') #появляется окно с полем "Введите имя заметки"
+button_note_del = QPushButton('Удалить заметку')
+button_note_save = QPushButton('Сохранить заметку')
+ 
+field_tag = QLineEdit('')
+field_tag.setPlaceholderText('Введите тег...')
+field_text = QTextEdit()
+button_tag_add = QPushButton('Добавить к заметке')
+button_tag_del = QPushButton('Открепить от заметки')
+button_tag_search = QPushButton('Искать заметки по тегу')
+list_tags = QListWidget()
+list_tags_label = QLabel('Список тегов')
+ 
+#расположение виджетов по лэйаутам
+layout_notes = QHBoxLayout()
+col_1 = QVBoxLayout()
+col_1.addWidget(field_text)
+ 
+col_2 = QVBoxLayout()
+col_2.addWidget(list_notes_label)
+col_2.addWidget(list_notes)
+row_1 = QHBoxLayout()
+row_1.addWidget(button_note_create)
+row_1.addWidget(button_note_del)
+row_2 = QHBoxLayout()
+row_2.addWidget(button_note_save)
+col_2.addLayout(row_1)
+col_2.addLayout(row_2)
+ 
+col_2.addWidget(list_tags_label)
+col_2.addWidget(list_tags)
+col_2.addWidget(field_tag)
+row_3 = QHBoxLayout()
+row_3.addWidget(button_tag_add)
+row_3.addWidget(button_tag_del)
+row_4 = QHBoxLayout()
+row_4.addWidget(button_tag_search)
+ 
+col_2.addLayout(row_3)
+col_2.addLayout(row_4)
+ 
+layout_notes.addLayout(col_1, stretch = 2)
+layout_notes.addLayout(col_2, stretch = 1)
+notes_win.setLayout(layout_notes)
+ 
+'''Функционал приложения'''
+def show_note():
+    #получаем текст из заметки с выделенным названием и отображаем его в поле редактирования
+    key = list_notes.selectedItems()[0].text()
+    print(key)
+    field_text.setText(notes[key]["текст"])
+    list_tags.clear()
+    list_tags.addItems(notes[key]["теги"])
+ 
+'''Запуск приложения'''
+#подключение обработки событий
+list_notes.itemClicked.connect(show_note)
+ 
+#запуск приложения 
+notes_win.show()
+ 
+with open("notes_data.json", "r") as file:
+    notes = json.load(file)
+list_notes.addItems(notes)
+ 
+app.exec_()
