@@ -1,4 +1,2 @@
-with open('my_file_2.txt', 'rw') as f_cur:
-    text = f_cur.read()
-    text+='new_text'
-    f_cur.write(text)
+with open('file_java.java', 'r') as f_java:
+    f_java.close()
