@@ -1,130 +1,127 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QListWidget, QListWidgetItem, QTextEdit, QPushButton, QLineEdit, QInputDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QListWidget, QVBoxLayout, QHBoxLayout, QListWidget, QPushButton, QLineEdit, QInputDialog, QTextEdit, QMessageBox
+from PyQt5.QtCore import Qt
 import sys
 import json
 
 class NeedWindow(QWidget):
     def __init__(self):
-        global count
+        global count_cycle
         super().__init__()
-        self.setGeometry(300, 300, 1000, 600)
-        self.setWindowTitle('Нужное окно')
-        self.main_line = QVBoxLayout()
+        self.setWindowTitle('Memory Card')
+        self.setGeometry(100, 100, 900, 600)
         self.common_line = QHBoxLayout()
-        self.common_line.setSpacing(2)
+        self.common_line.setSpacing(3)
         self.big_edit = QTextEdit()
-        self.common_line.addWidget(self.big_edit, stretch=1|2)
-        self.small_edits_line = QVBoxLayout()
-        self.small_edits_line.setSpacing(2)
-        self.line_first = QVBoxLayout()
-        self.list_zametks_label = QLabel(self)
-        self.list_zametks_label.setText('Список заметок')
-        self.line_first.addWidget(self.list_zametks_label)
-        self.list_zametks = QListWidget()
-        if count==0:
-            self.list_zametks.addItem('Добро пожаловать!')
-            self.list_zametks.itemSelectionChanged.connect(self.dobro_pozhalovat)
-        else:
-            for zametka, teg in zip(dict_cur.keys(), dict_cur.values()):
-                self.list_zametks.addItem(zametka)
-                def fun_cur():
-                    self.big_edit.setText(teg[1])
-                self.list_zametks.itemSelectionChanged.connect(fun_cur)
-        self.line_first.addWidget(self.list_zametks)
-        self.line_buttons_1 = QHBoxLayout()
-        self.line_buttons_1.setSpacing(2)
-        self.create_zametka_button = QPushButton('Создать заметку')
-        self.create_zametka_button.clicked.connect(self.create_zametka_fun)
-        self.line_buttons_1.addWidget(self.create_zametka_button, stretch=1|2)
-        self.delete_zametka_button = QPushButton('Удалить заметку')
-        self.line_buttons_1.addWidget(self.delete_zametka_button, stretch=1|2)
-        self.line_first.addLayout(self.line_buttons_1, stretch=1|2)
-        self.save_zametka = QPushButton('Сохранить заметку')
-        self.line_first.addWidget(self.save_zametka)
+        self.common_line.addWidget(self.big_edit, stretch=2)
 
-        self.line_second = QVBoxLayout()
-        self.list_tegs_label = QLabel(self)
-        self.list_tegs_label.setText('Список тегов')
-        self.line_second.addWidget(self.list_tegs_label)
-        self.list_tegs = QListWidget()
-        if count!=0:
-            print('Зашёл в теги')
-            for zametka, teg in zip(dict_cur.keys(), dict_cur.values()):
-                self.list_tegs.addItem(teg[0])
-                def fun_cur():
+        self.small_widgets_line = QVBoxLayout()
+        self.label_zametks = QLabel(self)
+        self.label_zametks.setText('Список заметок')
+        self.small_widgets_line.addWidget(self.label_zametks)
+        self.zametks_list = QListWidget()
+        if count_cycle==0:
+            self.zametks_list.addItem('Добро пожаловать!')
+            self.zametks_list.itemSelectionChanged.connect(self.hello_world)
+        else:
+            for zametka, teg in zip(f_dict.keys(), f_dict.values()):
+                self.zametks_list.addItem(zametka)
+                def func_cur():
                     self.big_edit.setText(teg[1])
-                self.list_tegs.itemSelectionChanged.connect(fun_cur)
-        self.line_second.addWidget(self.list_tegs)
-        self.input_line = QLineEdit()
-        self.input_line.setPlaceholderText('Введите тег')
-        self.line_second.addWidget(self.input_line)
-        self.line_buttons_2 = QHBoxLayout()
-        self.line_buttons_2.setSpacing(2)
-        self.add_teg_to_zametks = QPushButton('Добавить к заметкам')
-        self.add_teg_to_zametks.clicked.connect(self.add_to_zametks_fun)
-        self.line_buttons_2.addWidget(self.add_teg_to_zametks, stretch=1|2)
+                self.zametks_list.itemSelectionChanged.connect(func_cur)
+        self.small_widgets_line.addWidget(self.zametks_list)
+        self.zametks_buttons_line = QHBoxLayout()
+        self.zametks_buttons_line.setSpacing(2)
+        self.create_zametka = QPushButton('Создать заметку')
+        self.create_zametka.clicked.connect(self.create_zametka_fun)
+        self.zametks_buttons_line.addWidget(self.create_zametka, stretch=1)
+        self.delete_zametka = QPushButton('Удалить заметку')
+        self.delete_zametka.clicked.connect(self.delete_zametka_fun)
+        self.zametks_buttons_line.addWidget(self.delete_zametka, stretch=1)
+        self.small_widgets_line.addLayout(self.zametks_buttons_line)
+        self.save_zametka = QPushButton('Сохранить заметку')
+        self.save_zametka.clicked.connect(self.save_zametka_fun)
+        self.small_widgets_line.addWidget(self.save_zametka)
+        self.small_widgets_line.addStretch(1)
+
+        self.label_tegs = QLabel(self)
+        self.label_tegs.setText('Список тегов')
+        self.small_widgets_line.addWidget(self.label_tegs)
+        self.tegs_list = QListWidget()
+        for key, value in zip(f_dict.keys(), f_dict.values()):
+            self.tegs_list.addItem(value[0])
+        self.small_widgets_line.addWidget(self.tegs_list)
+        self.line_input_teg = QLineEdit()
+        self.line_input_teg.setPlaceholderText('Введите тег')
+        self.small_widgets_line.addWidget(self.line_input_teg)
+        self.tegs_buttons_line = QHBoxLayout()
+        self.tegs_buttons_line.setSpacing(2)
+        self.add_to_zametks = QPushButton('Добавить к заметкам')
+        self.add_to_zametks.clicked.connect(self.add_teg_fun)
+        self.tegs_buttons_line.addWidget(self.add_to_zametks, stretch=1)
         self.delete_from_zametks = QPushButton('Открепить от заметок')
-        self.line_buttons_2.addWidget(self.delete_from_zametks, stretch=1|2)
-        self.line_second.addLayout(self.line_buttons_2)
+        self.delete_from_zametks.clicked.connect(self.del_teg_fun)
+        self.tegs_buttons_line.addWidget(self.delete_from_zametks, stretch=1)
+        self.small_widgets_line.addLayout(self.tegs_buttons_line)
         self.find_zametks_by_teg = QPushButton('Искать заметки по тегу')
-        self.find_zametks_by_teg.clicked.connect(self.find_zametka_by_teg_fun)
-        self.line_second.addWidget(self.find_zametks_by_teg)
-        
-        self.small_edits_line.addLayout(self.line_first, stretch=1|2)
-        self.small_edits_line.addLayout(self.line_second, stretch=1|2)
-        self.common_line.addLayout(self.small_edits_line, stretch=1|2)
+        self.find_zametks_by_teg.clicked.connect(self.find_zametks_by_teg_fun)
+        self.small_widgets_line.addWidget(self.find_zametks_by_teg)
+        self.common_line.addLayout(self.small_widgets_line, stretch=1)
+
+        self.main_line = QVBoxLayout()
         self.main_line.addLayout(self.common_line)
         self.setLayout(self.main_line)
+
         self.show()
-        if count==0:
-            count+=1
+        if count_cycle==0:
+            count_cycle+=1
             sys.exit(app.exec_())
-    def dobro_pozhalovat(self):
-        global count
-        count+=1
+    def hello_world(self):
         self.hide()
         self.__init__()
     def create_zametka_fun(self):
         d = QInputDialog()
         text, _ = d.getText(self, 'Создание заметки', 'Введите заметку:')
-        if _:
-            self.hide()
-            dict_cur[text] = ['', '']
-            self.__init__()
-    def del_zametka_fun(self):
-        d = QInputDialog()
-        text, _ = d.getText(self, 'Удаление заметки', 'Введите заметку')
-        if _:
-            self.hide()
-            dict_cur.pop(text)
-            self.__init__()
-    def add_to_zametks_fun(self):
-        self.hide()
-        for zametka, teg in zip(dict_cur.keys(), dict_cur.values()):
-            print('Ищу')
-            print(zametka, teg)
-            if teg == ['', '']:
-                print('Попал')
-                dict_cur[zametka] == [self.input_line.text(), self.big_edit.toPlainText()]
-        self.__init__()
-    def find_zametka_by_teg_fun(self):
-        for zametka, teg in zip(dict_cur.keys(), dict_cur.values()):
-            print(teg[0], self.input_line.text())
-            if teg[0]==self.input_line.text():
-                self.big_edit.setText(teg[1])
-                print('Нашёл')
-        print('Я здесь')
-        self.show()
-    def save_zametka_fun(self):
-        with open('file_j.json') as f_save:
-            f_cur = json.dump(f_save, dict_cur)
-            f_save.close()
 
-with open('file_j.json') as f_cur:
-    dict_cur = json.load(f_cur)
-    print(dict_cur)
+        if _:
+            self.hide()
+            f_dict[text] = [self.line_input_teg.text(), self.big_edit.toPlainText()]
+            self.__init__()
+    def save_zametka_fun(self):
+        with open('file_j.json', 'w', encoding="UTF-8") as f_cur:
+            json.dump(f_dict, f_cur)
+            f_cur.close()
+            self.hide()
+            self.__init__()
+    def delete_zametka_fun(self):
+        d = QInputDialog()
+        text, _ = d.getText(self, "Удаление заметки", "Введите заметку:")
+        if _:
+            self.close()
+            if text in f_dict:
+                f_dict.pop(text)
+            self.__init__()
+    def add_teg_fun(self):
+        for key, value in zip(f_dict.keys(), f_dict.values()):
+            if value == ['','']:
+                f_dict[key] = [self.line_input_teg.text(), self.big_edit.toPlainText()]
+        self.close()
+        self.__init__()
+    def del_teg_fun(self):
+        for key, value in zip(f_dict.keys(), f_dict.values()):
+            if value[0] == self.line_input_teg.text():
+                f_dict[key] = ['', '']
+        self.close()
+        self.__init__()
+    def find_zametks_by_teg_fun(self):
+        for zametka, teg in zip(f_dict.keys(), f_dict.values()):
+            if teg[0] == self.line_input_teg.text():
+                self.big_edit.setText(teg[1])
+        self.show()
+
+with open('file_j.json', 'r', encoding="UTF-8") as f_cur:
+    f_dict = json.load(f_cur)
     f_cur.close()
 
+count_cycle = 0
 app = QApplication(sys.argv)
-count = 0
-
-n = NeedWindow()
+w= NeedWindow()
