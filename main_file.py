@@ -1,94 +1,63 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QMainWindow, QVBoxLayout, QHBoxLayout, QLineEdit, QInputDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from PIL import Image, ImageFilter
+import os
 import sys
 
 class NeedWindow(QMainWindow):
-    def __init__(self, *args):
-        #def common_fun():
+    def __init__(self, name):
         super().__init__()
-        self.setWindowTitle('Моё окно')
-        self.setGeometry(200, 100, 1000, 600)
-        self.win_main = QWidget()
+        self.setGeometry(300, 300, 1000, 500)
         self.main_line = QVBoxLayout()
-        self.HLine = QHBoxLayout()
-        self.HLine.setSpacing(2)
-        if len(args)>0:
-            with Image.open(args[0]) as image_cur:
-                image_cur = image_cur.resize((500, 500))
-                image_cur.save(args[0][0:len(args)-5]+'.small.jpg')
-            self.pix_cur = QPixmap(args[0][0:len(args)-5]+'.small.jpg')
-            self.label_image = QLabel(self)
-            self.label_image.setPixmap(self.pix_cur)
-            self.HLine.addWidget(self.label_image, stretch=1)
-            self.buttons_line = QVBoxLayout()
-            self.resize_or_cut = QHBoxLayout()
-            self.buttons_line.setSpacing(2)
-            self.resize_image = QPushButton('Поменять размер')
-            self.resize_image.clicked.connect(self.change_size)
-            self.resize_or_cut.addWidget(self.resize_image, stretch=1)
-            #self.resize_or_cut.addStretch(1)
-            self.cut_image = QPushButton('Обрезать')
-            self.resize_or_cut.addWidget(self.cut_image, stretch=1)
-            self.buttons_line.addLayout(self.resize_or_cut)
-            self.black_or_endhance = QHBoxLayout()
-            self.black_or_endhance.setSpacing(2)
-            self.black = QPushButton('Сделать чёрно-белым')
-            self.black_or_endhance.addWidget(self.black, stretch=1)
-            #self.black_or_endhance.addStretch(1)
-            self.enchance = QPushButton('Сделать что-то непонятное')
-            self.black_or_endhance.addWidget(self.enchance, stretch=1)
-            self.buttons_line.addLayout(self.black_or_endhance)
-            self.HLine.addLayout(self.buttons_line)
-        else:
-            self.HLine.addStretch(1)
-            self.VLine = QVBoxLayout()
-            self.VLine.setSpacing(8)
-            self.input_label = QLabel(self)
-            self.input_label.setText('Введите имя изображения')
-            self.VLine.addWidget(self.input_label)
-            self.input_line = QLineEdit()
-            self.input_line.setPlaceholderText('Введите место сущестующего изображения')
-            self.VLine.addWidget(self.input_line)
-            self.input_button = QPushButton('Ввёл')
-            self.input_button.clicked.connect(self.input_reaction)
-            self.VLine.addWidget(self.input_button)
-            self.VLine.addStretch(5)
-            self.HLine.addLayout(self.VLine)
-
-        self.main_line.addLayout(self.HLine)
-        self.win_main.setLayout(self.main_line)
-        
-        self.setCentralWidget(self.win_main)
+        self.common_line = QHBoxLayout()
+        self.common_line.setSpacing(2)
+        self.label_image = QLabel(self)
+        self.pix_image = QPixmap(name)
+        self.label_image.setPixmap(self.pix_image)
+        self.common_line.addWidget(self.label_image)
+        self.main_line.addLayout(self.common_line)
+        self.help_win = QWidget()
+        self.help_win.setLayout(self.main_line)
+        self.setCentralWidget(self.help_win)
         self.show()
-        global count_cycle
-        if count_cycle==0:
-            count_cycle+=1
-            sys.exit(app.exec_())
-    def input_reaction(self):
-        try:
-            self.close()
-            self.__init__(self.input_line.text())
-        except:
-            self.input_line.setPlaceholderText('Нет такой директории')
-    def change_size(self):
-        d = QInputDialog()
-        text, _ = d.getText(self, 'Изменение размера', 'Введите нужный размер:')
-        if _:
-            #try:
-                list_size = text.split(' ')
-                global image_cur
-                image_cur = image_cur.resize(list_size[0], list_size[1])
-                d = QInputDialog()
-                text, _ = d.getText(self, 'Создание изображение', 'Введите название изображения:')
-                image_cur.save(text)
-            #except:
-            #    pass
 
+def start_win():
+    def start():
+        print(os.path.isfile(line_input.text()))
+        if os.path.isfile(line_input.text()):
+            print('Условие выполнилось')
+            nonlocal question_win
+            question_win.hide()
+            question_win = NeedWindow(line_input.text())
+    question_win = QMainWindow()
+    question_win.setWindowTitle('Приложение для обработки фото')
+    question_win.setGeometry(300, 300, 1000, 500)
+    main_line = QVBoxLayout()
+    main_line.setSpacing(5)
+    question = QLabel(question_win)
+    question.setText('Введите имя изображения:')
+    main_line.addWidget(question, alignment=Qt.AlignCenter, stretch=1)
+    main_line.addStretch(1)
+    line_input = QLineEdit()
+    main_line.addWidget(line_input, stretch=1)
+    main_line.addStretch(1)
+    button_line = QHBoxLayout()
+    button_line.setSpacing(5)
+    button_line.addStretch(2)
+    button_start = QPushButton('Нажмите чтобы начать')
+    button_start.clicked.connect(start)
+    button_line.addWidget(button_start, stretch=1)
+    button_line.addStretch(2)    
+    main_line.addLayout(button_line)
+    main_line.addStretch(2)
+    help_win = QWidget()
+    help_win.setLayout(main_line)
+    question_win.setCentralWidget(help_win)
+    question_win.show()
+    sys.exit(app.exec_())
 
-#global constants
-count_cycle = 0
-
+count_win = 0
 app = QApplication(sys.argv)
-n = NeedWindow()
+
+
+start_win()
