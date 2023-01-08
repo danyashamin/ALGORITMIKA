@@ -4,6 +4,8 @@ import sys
 class MyWind(QWidget):
     def __init__(self):
         super().__init__()
+        self.win_2 = QWidget()
+        self.win_2.setGeometry(100, 100, 100, 100)
         self.setGeometry(300, 300, 500, 500)
         self.main_line = QVBoxLayout()
         self.button_line = QHBoxLayout()
@@ -16,19 +18,17 @@ class MyWind(QWidget):
         self.main_line.addLayout(self.button_line)
         self.setLayout(self.main_line)
 
-
         self.show()
         global count_app
         print(count_app)
-        if count_app>0:
-            win_2 = QWidget()
-            win_2.setGeometry(200, 200, 300, 300)
-            win_2.show()
         if count_app==0:
             count_app+=1
             sys.exit(app.exec_())
+        else:
+            self.win_2.show()
     def func_1(self):
         global count_app
+        self.hide()
         count_app+=1
         self.__init__()
 
