@@ -222,3 +222,6 @@ count_image = 0
 count_app = 0
 app = QApplication(sys.argv)
 i = NeedApplication(app)
+#создай объект класса ImageEditor с данными картинки-оригинала
+
+#отредактируй изображение и сохрани результат
